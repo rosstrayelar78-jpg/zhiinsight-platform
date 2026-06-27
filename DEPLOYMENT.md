@@ -45,6 +45,26 @@ psql "postgresql://seri_user:replace_with_strong_password@localhost:5432/seri_mv
 npm run db:seed
 ```
 
+生产环境 Seed 说明：
+
+- 默认读取项目内文件：`seeds/银发经济内容报告_30条政策_20案例_5专题_5报告.md`
+- 不依赖 Windows 本地绝对路径
+- 如需使用其他内容报告，可设置 `CONTENT_REPORT_PATH`
+
+先验证解析：
+
+```bash
+node scripts/seed-content.mjs --dry-run
+```
+
+指定自定义内容报告：
+
+```bash
+CONTENT_REPORT_PATH="/var/www/zhiinsight-platform/seeds/content-report.md" npm run db:seed
+```
+
+如果文件不存在，脚本会输出明确错误提示，并停止导入。
+
 ## 4. 配置环境变量
 
 复制 `.env.example` 为 `.env.production`：

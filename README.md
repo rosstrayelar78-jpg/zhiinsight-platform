@@ -110,6 +110,34 @@ npm run format
 npm run build
 ```
 
+## Seed 内容导入
+
+首批内容报告默认放在：
+
+```text
+seeds/银发经济内容报告_30条政策_20案例_5专题_5报告.md
+```
+
+导入前可先验证解析结果，不写入数据库：
+
+```bash
+node scripts/seed-content.mjs --dry-run
+```
+
+导入数据库：
+
+```bash
+npm run db:seed
+```
+
+如果内容报告放在其他位置，可通过环境变量指定：
+
+```bash
+CONTENT_REPORT_PATH="/absolute/path/to/content-report.md" npm run db:seed
+```
+
+生产环境不依赖任何 Windows 本地路径。如果默认文件不存在，脚本会输出明确错误提示。
+
 ## Sprint 0 边界
 
 本阶段没有实现会员、支付、AI 搜索、企业库、项目库、复杂权限、复杂 CMS 表单和商业化能力。

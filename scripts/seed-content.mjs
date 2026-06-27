@@ -7,13 +7,23 @@ const { Pool } = pg;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 
-const defaultReportPath =
-  "C:\\Users\\李青广\\.openclaw-autoclaw\\agents\\agent-rcs1be\\workspace\\银发经济内容报告_30条政策_20案例_5专题_5报告.md";
+const defaultReportPath = path.join(root, "seeds", "银发经济内容报告_30条政策_20案例_5专题_5报告.md");
 
 const reportPath = process.env.CONTENT_REPORT_PATH || defaultReportPath;
 const databaseUrl =
   process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/seri_mvp";
 const dryRun = process.argv.includes("--dry-run");
+
+function ensureContentReportExists() {
+  if (fs.existsSync(reportPath)) return;
+
+  console.error("Seed content report not found.");
+  console.error(`Expected path: ${reportPath}`);
+  console.error("Fix options:");
+  console.error("1. Put the content report at ./seeds/银发经济内容报告_30条政策_20案例_5专题_5报告.md");
+  console.error("2. Or set CONTENT_REPORT_PATH to an existing Markdown file path.");
+  process.exit(1);
+}
 
 function createSlug(input, fallback = "content") {
   const ascii = input
@@ -237,6 +247,7 @@ async function getOrCreateTag(client, name) {
 }
 
 async function seed() {
+  ensureContentReportExists();
   const markdown = fs.readFileSync(reportPath, "utf8");
   const policySection = extractSection(markdown, "## 第一部分", "## 第二部分");
   const caseSection = extractSection(markdown, "## 第二部分", "## 第三部分");
